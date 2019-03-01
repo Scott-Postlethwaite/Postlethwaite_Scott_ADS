@@ -104,15 +104,12 @@ int main()
 		getchar();
 	 }
 	
-  //  char game = new int[][num];
   
     char** game =  (char **)malloc(num * sizeof(char*));
     for (int i=0; i<num; i++)
 	{
 		game[i] = (char*)malloc(sizeof(char));
 		for(int j = 0; j < num; j++){
-			//**game[i]=(char *)malloc(num * sizeof(chars));
-			//*(game + i*num + j) = ' ';
 			(game[i])[j] = ' ';
 		}
 	}
@@ -132,34 +129,21 @@ int main()
 		row = -1;
 		column = -1;
 		printf("%c to play\n", player);
+		while(!isLegal(row, column, game))
+		{
+			printf("Enter row number: ");
+			scanf("%d",&row);
+			getchar();
+			printf("Enter Column number: ");
+			scanf("%d",&column);
+			getchar();
+		}
+	
+		(game[row])[column] = player;
+		drawBoard(game);		
+		totalEntry++;
 		
-		//while(!hasWon(player,game))
-		//{
-			while(!isLegal(row, column, game))
-			{
-				printf("Enter row number: ");
-				scanf("%d",&row);
-				getchar();
-				printf("Enter Column number: ");
-				scanf("%d",&column);
-				getchar();
-			}
-		
-			(game[row])[column] = player;
-			drawBoard(game);
-	//	}
-		/*	if(player == 'X')
-			 {
-				 player='O';
-			 }
-			 else
-			 {
-				 player='X';
-			 }
-			*/ 			
-			 totalEntry++;
-		
-}  	
+	}  	
 
     return 0;
 }
