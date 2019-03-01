@@ -47,6 +47,53 @@ bool isLegal(int row, int column, char **game)
 	
 }
 
+
+
+bool hasWon(char player, char **game)
+{
+	int diagonal = 0;
+	for(int i=0; i<num;i++)
+	{
+		int vertical =0;
+		int horizontal=0;
+		if((game[i])[i] ==player)
+		{
+			diagonal++;
+		}
+		for(int j=0; j<num;j++)
+		{	
+			if((game[i])[j] ==player)
+			{
+				horizontal++;
+			}
+			if((game[j])[i] ==player)
+			{
+				vertical++;
+			}
+			if(vertical == num)
+			{
+				printf("%c Wins!",player);
+				exit(0);
+			}
+			if(horizontal == num)
+			{
+				printf("%c Wins!",player);
+				exit(0);
+			}
+		}
+	}
+	if(diagonal == num)
+	{
+		printf("%c Wins!",player);
+		exit(0);
+	}
+	
+return false;
+}
+
+
+
+
 int main()
 {
 	num =1;
@@ -70,25 +117,38 @@ int main()
 		}
 	}
     int totalEntry =1,row,column;
-	char player = 'O';
+	char player = 'X';
 
 
-    while(totalEntry<= num * num){
+    while(totalEntry<= num * num && !hasWon(player,game)){
+		if(player == 'X')
+		 {
+			 player='O';
+		 }
+		 else
+		 {
+			 player='X';
+		 }
 		row = -1;
 		column = -1;
 		printf("%c to play\n", player);
-		while(!isLegal(row, column, game))
-		{
-			printf("Enter row number: ");
-			scanf("%d",&row);
-			getchar();
-			printf("Enter Column number: ");
-			scanf("%d",&column);
-			getchar();
-		}
+		
+		//while(!hasWon(player,game))
+		//{
+			while(!isLegal(row, column, game))
+			{
+				printf("Enter row number: ");
+				scanf("%d",&row);
+				getchar();
+				printf("Enter Column number: ");
+				scanf("%d",&column);
+				getchar();
+			}
+		
 			(game[row])[column] = player;
 			drawBoard(game);
-			if(player == 'X')
+	//	}
+		/*	if(player == 'X')
 			 {
 				 player='O';
 			 }
@@ -96,9 +156,9 @@ int main()
 			 {
 				 player='X';
 			 }
-			 			
+			*/ 			
 			 totalEntry++;
-		 
+		
 }  	
 
     return 0;
