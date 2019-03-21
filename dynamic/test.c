@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
@@ -174,127 +173,167 @@ return false;
 
 int main()
 {
-	num =1;
-	char a;
+	int choice =-1;
+	//while(choice !=1 || choice !=2)
+	//{
+		printf("Do you want to 1- play a new game or 2- watch a previous game?\n");
+		scanf("%d",&choice);
+	//}
+	if (choice == 1)
+	{
+		num =1;
+		char a;
+		
+		while(num <=1){
+			printf("How big do you want your board? ");
+			scanf("%d",&num);
+			getchar();
+			
+			
+		 }
+		char ***moves =  (char ***)malloc(num * num * num * sizeof(char));
+		for (int i=0; i<num*num; i++)
+		{
+			moves[i] = (char**)malloc(sizeof(char) *num *num);
+			for (int j=0; j<num; j++)
+		{
+			moves[i][j] = (char*)malloc(num * sizeof(char));
+			for(int l = 0; l < num; l++){
+				moves[i][j][l] = (char*)malloc(num * sizeof(char));
+			}
+		}
+		}
+		printf("before game is allocated\n");
+		char** game =  (char **)malloc(num * sizeof(char*));
+		for (int i=0; i<num; i++)
+		{
+			game[i] = (char*)malloc(num * sizeof(char));
+			for(int j = 0; j < num; j++){
+				(game[i])[j] = ' ';
+			}
+		}
+		printf("Before moves is set to an empty board\n");
+		for (int j=0; j<num; j++)
+			{
+				
+				for(int l = 0; l < num; l++){
+					(moves[0])[j][l] = game[j][l];
+				}
+			}
+			printf("after board is set to an empty board\n");
+			drawBoard(moves[0]);
+		int totalEntry =1;
+		int row;
+		int column;
+		char player = 'X';
 
-	while(num <=1){
-		printf("How big do you want your board? ");
-		scanf("%d",&num);
+
+		while(totalEntry<= num * num && !hasWon(player,game,moves)){
+			if(player == 'X')
+			 {
+				 player='O';
+			 }
+			 else
+			 {
+				 player='X';
+			 }
+			row = -1;
+			column = -1;
+			printf("%c to play\n", player);
+			while(!isLegal(row, column, game))
+			{
+				printf("Enter row number: ");
+				scanf("%d",&row);
+				char c = getchar();
+				printf("Enter Column number: ");
+				scanf("%d",&column);
+				char d = getchar();
+				if(c ==CTRL_KEYPRESS('u') || d == CTRL_KEYPRESS('u')){
+					totalEntry--;
+					
+					for (int i=0; i<num; i++)
+					{	
+						for(int j = 0; j< num; j++){
+							game[i][j] = moves[totalEntry-1][i][j];
+						}
+					}
+					
+					printf("Move undone\n");
+					drawBoard(game);
+					if(player == 'X')
+					 {
+						 player='O';
+					 }
+					 else
+					 {
+						 player='X';
+					 }
+					 
+					 printf("%c to play\n", player);
+				}
+				
+				if(c ==CTRL_KEYPRESS('y') || d == CTRL_KEYPRESS('y')){
+					
+					for (int i=0; i<num; i++)
+					{	
+						for(int j = 0; j< num; j++){
+							game[i][j] = moves[totalEntry][i][j];
+						}
+					}
+					totalEntry++;
+					printf("Move redone\n");
+					drawBoard(game);
+					if(player == 'X')
+					 {
+						 player='O';
+					 }
+					 else
+					 {
+						 player='X';
+					 }
+					 
+					 printf("%c to play\n", player);
+				}
+			}
+		
+			(game[row])[column] = player;
+			drawBoard(game);
+			for (int j=0; j<num; j++)
+			{
+				
+				for(int l = 0; l < num; l++){
+					(moves[totalEntry])[j][l] = game[j][l];
+				}
+			}
+			drawBoard(moves[totalEntry-1]);
+			totalEntry++;
+		}  	
+
+		return 0;
+	}
+	if(choice == 2)
+	{
+		char c[1000];
+		int error =1;
+		char g2[10];
+		while (error ==1){
+		printf("Enter a name for the game\n");
+		scanf("%s",&g2);
 		getchar();
-		
-		
-	 }
-	char ***moves =  (char ***)malloc(num * num *  num *sizeof(char));
-	for (int i=0; i<num*num; i++)
-	{
-		moves[i] = (char**)malloc(sizeof(char) * num * num);
-		for (int j=0; j<num; j++)
-	{
-		moves[i][j] = (char*)malloc(num * sizeof(char));
-		for(int l = 0; l < num; l++){
-			moves[i][j][l] = (char*)malloc(num * sizeof(char));
+		FILE* stream;
+		char txt = ".txt";
+		strcat(g2,".txt");
+		printf("%c", g2);
+		if ((stream = fopen(g2, "r")) == NULL)
+		{
+			printf("Error opening file");
+			error =1;
+			return 0;
+		}
+		printf("I'm about to scan a line\n");
+		 fscanf(stream,"%[^\n]", c);
+		 printf("I'm about to draw a board\n");
+		 drawBoard(c);
 		}
 	}
-	}
-    char** game =  (char **)malloc(num * sizeof(char*));
-    for (int i=0; i<num; i++)
-	{
-		game[i] = (char*)malloc(num * sizeof(char));
-		for(int j = 0; j < num; j++){
-			(game[i])[j] = ' ';
-		}
-	}
-	for (int j=0; j<num; j++)
-		{
-			for(int l = 0; l < num; l++){
-				(moves[0])[j][l] = game[j][l];
-			}
-		}
-    int totalEntry =1;
-	int row;
-	int column;
-	char player = 'X';
-
-
-    while(totalEntry<= num * num && !hasWon(player,game,moves)){
-		if(player == 'X')
-		 {
-			 player='O';
-		 }
-		 else
-		 {
-			 player='X';
-		 }
-		row = -1;
-		column = -1;
-		printf("%c to play\n", player);
-		while(!isLegal(row, column, game))
-		{
-			printf("Enter row number: ");
-			scanf("%d",&row);
-			char c = getchar();
-			printf("Enter Column number: ");
-			scanf("%d",&column);
-			char d = getchar();
-			if(c ==CTRL_KEYPRESS('u') || d == CTRL_KEYPRESS('u')){
-				totalEntry--;
-				
-				for (int i=0; i<num; i++)
-				{	
-					for(int j = 0; j< num; j++){
-						game[i][j] = moves[totalEntry-1][i][j];
-					}
-				}
-				
-				printf("Move undone\n");
-				drawBoard(game);
-				if(player == 'X')
-				 {
-					 player='O';
-				 }
-				 else
-				 {
-					 player='X';
-				 }
-				 
-				 printf("%c to play\n", player);
-			}
-			
-			if(c ==CTRL_KEYPRESS('y') || d == CTRL_KEYPRESS('y')){
-				
-				for (int i=0; i<num; i++)
-				{	
-					for(int j = 0; j< num; j++){
-						game[i][j] = moves[totalEntry][i][j];
-					}
-				}
-				totalEntry++;
-				printf("Move redone\n");
-				drawBoard(game);
-				if(player == 'X')
-				 {
-					 player='O';
-				 }
-				 else
-				 {
-					 player='X';
-				 }
-				 
-				 printf("%c to play\n", player);
-			}
-		}
-	
-		(game[row])[column] = player;
-		drawBoard(game);
-		for (int j=0; j<num; j++)
-		{
-			
-			for(int l = 0; l < num; l++){
-				(moves[totalEntry])[j][l] = game[j][l];
-			}
-		}
-		totalEntry++;
-	}  	
-
-    return 0;
 }
