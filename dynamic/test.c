@@ -48,7 +48,7 @@ bool isLegal(int row, int column, char **game)
 
 
 
-bool hasWon(char player, char **game, char** moves)
+bool hasWon(char player, char **game, char*** moves)
 {
 	int diagonal = 0;
 	for(int i=0; i<num;i++)
@@ -117,12 +117,20 @@ bool hasWon(char player, char **game, char** moves)
 					FILE* stream;
 					char txt = ".txt";
 					strcat(g2,".txt");
-					printf("%c", g2);
 					printf("We will now save the game\n");
 					stream = fopen(g2, "w");
+					fprintf(stream,"%d\n",num);
 					for (int i=0; i< sizeof(moves); i++)
 					{
-						fprintf(stream,"%s\n", moves[i]);
+						
+						for (int j=0; j<num; j++)
+						{
+							
+							for(int l = 0; l < num; l++){
+								fprintf(stream,"%c\n", moves[i][j][l]);
+							}
+						}
+						
 					}
 					fclose(stream); 
 					exit(0);
@@ -313,6 +321,7 @@ int main()
 	}
 	if(choice == 2)
 	{
+		char tmp;
 		char c[1000];
 		int error =1;
 		char g2[10];
@@ -323,17 +332,47 @@ int main()
 		FILE* stream;
 		char txt = ".txt";
 		strcat(g2,".txt");
-		printf("%c", g2);
 		if ((stream = fopen(g2, "r")) == NULL)
 		{
 			printf("Error opening file");
 			error =1;
 			return 0;
 		}
+		printf("%s\n",g2);
 		printf("I'm about to scan a line\n");
-		 fscanf(stream,"%[^\n]", c);
+		tmp = fgetc(stream);
+		printf("I've read a line\n");
+		num = atoi(&tmp);
+		printf("%d\n",num);
+		char ***moves =  (char ***)malloc(num * num * num * sizeof(char));
+		for (int i=0; i<num*num; i++)
+		{
+			moves[i] = (char**)malloc(sizeof(char) *num *num);
+			for (int j=0; j<num; j++)
+		{
+			moves[i][j] = (char*)malloc(num * sizeof(char));
+			for(int l = 0; l < num; l++){
+				moves[i][j][l] = (char*)malloc(num * sizeof(char));
+			}
+		}
+		}
+
+			for(int i=0;i<num*num;i++)
+			{
+				for (int j=0; j<num; j++)
+					{
+						
+						for(int l = 0; l < num; l++){
+							(moves[i])[j][l] = fgetc(stream);
+						}
+					}
+			}
 		 printf("I'm about to draw a board\n");
-		 drawBoard(c);
+		 for(int count=0;count<num*num; count++)
+		{
+			drawBoard(moves[count]);
+			getchar();
+		}
 		}
 	}
 }
