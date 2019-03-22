@@ -120,7 +120,7 @@ bool hasWon(char player, char **game, char*** moves)
 					printf("We will now save the game\n");
 					stream = fopen(g2, "w");
 					fprintf(stream,"%d\n",num);
-					for (int i=0; i< sizeof(moves); i++)
+					for (int i=0; i< num * num; i++)
 					{
 						
 						for (int j=0; j<num; j++)
@@ -361,7 +361,6 @@ int main()
 			{
 				for (int j=0; j<num; j++)
 					{
-						
 						for(int l = 0; l < num; l++){
 							(moves[i])[j][l] = fgetc(stream);
 						}
