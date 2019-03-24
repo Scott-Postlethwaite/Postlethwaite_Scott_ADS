@@ -117,9 +117,8 @@ bool hasWon(char player, char **game, char*** moves)
 					FILE* stream;
 					char txt = ".txt";
 					strcat(g2,".txt");
-					printf("We will now save the game\n");
 					stream = fopen(g2, "w");
-					fprintf(stream,"%d\n",num);
+					fprintf(stream,"%d",num);
 					for (int i=0; i< num * num; i++)
 					{
 						
@@ -127,11 +126,12 @@ bool hasWon(char player, char **game, char*** moves)
 						{
 							
 							for(int l = 0; l < num; l++){
-								fprintf(stream,"%c\n", moves[i][j][l]);
+								fprintf(stream,"%c", moves[i][j][l]);
 							}
 						}
 						
 					}
+					printf("The game has been saved.\n");
 					fclose(stream); 
 					exit(0);
 				}
@@ -339,9 +339,7 @@ int main()
 			return 0;
 		}
 		printf("%s\n",g2);
-		printf("I'm about to scan a line\n");
 		tmp = fgetc(stream);
-		printf("I've read a line\n");
 		num = atoi(&tmp);
 		printf("%d\n",num);
 		char ***moves =  (char ***)malloc(num * num * num * sizeof(char));
@@ -366,7 +364,6 @@ int main()
 						}
 					}
 			}
-		 printf("I'm about to draw a board\n");
 		 for(int count=0;count<num*num; count++)
 		{
 			drawBoard(moves[count]);
