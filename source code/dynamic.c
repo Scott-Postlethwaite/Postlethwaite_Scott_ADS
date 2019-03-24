@@ -4,6 +4,7 @@
 #define CTRL_KEYPRESS(k) ((k)  & 0x1f)
 
 int num;
+int totalEntry =1;
 
 void drawBoard(char **board)
 {
@@ -71,7 +72,7 @@ bool hasWon(char player, char **game, char*** moves)
 			}
 			if(vertical == num)
 			{
-					char Y;
+				char Y;
 				char gameName;
 				char g2[10];
 				printf("%c Wins!\n",player);
@@ -81,18 +82,26 @@ bool hasWon(char player, char **game, char*** moves)
 				if(Y == 'Y' || Y == 'y')
 				{
 					printf("Enter a name for the game\n");
-					scanf("%c",&g2);
+					scanf("%s",&g2);
 					getchar();
 					FILE* stream;
 					char txt = ".txt";
 					strcat(g2,".txt");
-					printf("%c", g2);
-					printf("We will now save the game\n");
 					stream = fopen(g2, "w");
-					for (int i=0; i< sizeof(moves); i++)
+					fprintf(stream,"%d",num);
+					for (int i=0; i< totalEntry; i++)
 					{
-						fprintf(stream,"%s\n", moves[i]);
+						
+						for (int j=0; j<num; j++)
+						{
+							
+							for(int l = 0; l < num; l++){
+								fprintf(stream,"%c", moves[i][j][l]);
+							}
+						}
+						
 					}
+					printf("The game has been saved.\n");
 					fclose(stream); 
 					exit(0);
 				}
@@ -119,7 +128,9 @@ bool hasWon(char player, char **game, char*** moves)
 					strcat(g2,".txt");
 					stream = fopen(g2, "w");
 					fprintf(stream,"%d",num);
-					for (int i=0; i< num * num; i++)
+					fprintf(stream,"%d",totalEntry);
+
+					for (int i=0; i< totalEntry; i++)
 					{
 						
 						for (int j=0; j<num; j++)
@@ -143,7 +154,7 @@ bool hasWon(char player, char **game, char*** moves)
 	}
 	if(diagonal == num)
 	{
-					char Y;
+				char Y;
 				char gameName;
 				char g2[10];
 				printf("%c Wins!\n",player);
@@ -153,18 +164,26 @@ bool hasWon(char player, char **game, char*** moves)
 				if(Y == 'Y' || Y == 'y')
 				{
 					printf("Enter a name for the game\n");
-					scanf("%c",&g2);
+					scanf("%s",&g2);
 					getchar();
 					FILE* stream;
 					char txt = ".txt";
 					strcat(g2,".txt");
-					printf("%c", g2);
-					printf("We will now save the game\n");
 					stream = fopen(g2, "w");
-					for (int i=0; i< sizeof(moves); i++)
+					fprintf(stream,"%d",num);
+					for (int i=0; i< totalEntry; i++)
 					{
-						fprintf(stream,"%s\n", moves[i]);
+						
+						for (int j=0; j<num; j++)
+						{
+							
+							for(int l = 0; l < num; l++){
+								fprintf(stream,"%c", moves[i][j][l]);
+							}
+						}
+						
 					}
+					printf("The game has been saved.\n");
 					fclose(stream); 
 					exit(0);
 				}
@@ -211,7 +230,6 @@ int main()
 			}
 		}
 		}
-		printf("before game is allocated\n");
 		char** game =  (char **)malloc(num * sizeof(char*));
 		for (int i=0; i<num; i++)
 		{
@@ -220,7 +238,6 @@ int main()
 				(game[i])[j] = ' ';
 			}
 		}
-		printf("Before moves is set to an empty board\n");
 		for (int j=0; j<num; j++)
 			{
 				
@@ -228,9 +245,8 @@ int main()
 					(moves[0])[j][l] = game[j][l];
 				}
 			}
-			printf("after board is set to an empty board\n");
 			drawBoard(moves[0]);
-		int totalEntry =1;
+
 		int row;
 		int column;
 		char player = 'X';
@@ -313,7 +329,6 @@ int main()
 					(moves[totalEntry])[j][l] = game[j][l];
 				}
 			}
-			drawBoard(moves[totalEntry-1]);
 			totalEntry++;
 		}  	
 
@@ -341,7 +356,15 @@ int main()
 		printf("%s\n",g2);
 		tmp = fgetc(stream);
 		num = atoi(&tmp);
-		printf("%d\n",num);
+		char tmp2;
+		tmp2 = fgetc(stream);
+		int counting;
+		counting = atoi(&tmp2);
+		printf("The board had %d spaces\n",num);
+			
+		printf("There were %c moves\n",tmp2);
+
+
 		char ***moves =  (char ***)malloc(num * num * num * sizeof(char));
 		for (int i=0; i<num*num; i++)
 		{
@@ -364,11 +387,13 @@ int main()
 						}
 					}
 			}
-		 for(int count=0;count<num*num; count++)
+		 for(int count=0;count<counting; count++)
 		{
 			drawBoard(moves[count]);
 			getchar();
 		}
+		fclose(stream);
+		exit(0);
 		}
 	}
 }
